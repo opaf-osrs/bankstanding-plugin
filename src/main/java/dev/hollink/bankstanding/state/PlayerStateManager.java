@@ -6,8 +6,8 @@ import static dev.hollink.bankstanding.constant.TimeConstants.GRACE_PERIOD_GRIND
 import static dev.hollink.bankstanding.constant.TimeConstants.GRACE_PERIOD_MOVEMENT;
 import dev.hollink.bankstanding.domain.Activity;
 import dev.hollink.bankstanding.domain.PlayerState;
+import dev.hollink.bankstanding.events.BankstandingEvent;
 import dev.hollink.bankstanding.events.BankstandingEventBus;
-import dev.hollink.bankstanding.events.BankstandingPlayerStateChangedEvent;
 import java.time.Instant;
 import java.util.List;
 import javax.inject.Inject;
@@ -28,7 +28,7 @@ import net.runelite.api.events.ChatMessage;
 public class PlayerStateManager
 {
 	private final Client client;
-	private final BankstandingEventBus eventBus;
+	private final BankstandingEventBus events;
 
 	private PlayerState currentPlayerState;
 
@@ -40,8 +40,10 @@ public class PlayerStateManager
 	{
 		currentPlayerState = new PlayerState(Instant.now(), ActivityState.GRINDING);
 
+		// Setting the initial timers for each activity. Starting the 'EXP' drop timer to now.
+		// This ensures the player does not start getting EXP until the first state switch.
+		lastExperienceDrop = new Activity<>(client.getOverallExperience(), Instant.now());
 		lastMovement = new Activity<>(client.getLocalPlayer().getWorldLocation(), Instant.EPOCH);
-		lastExperienceDrop = new Activity<>(client.getOverallExperience(), Instant.EPOCH);
 		lastChatMessage = new Activity<>(null, Instant.EPOCH);
 
 		log.debug("PlayerStateManager started");
@@ -126,8 +128,8 @@ public class PlayerStateManager
 	{
 		PlayerState newPlayerState = new PlayerState(Instant.now(), newState);
 
-		eventBus.publish(
-			BankstandingPlayerStateChangedEvent.builder()
+		events.publish(
+			BankstandingEvent.stateChanged()
 				.oldState(currentPlayerState)
 				.newState(newPlayerState)
 				.build()

@@ -1,6 +1,7 @@
 package dev.hollink.bankstanding;
 
 import com.google.inject.Provides;
+import dev.hollink.bankstanding.overlay.BankstandingLevelProgressOverlay;
 import dev.hollink.bankstanding.state.BankstandingExperienceManager;
 import dev.hollink.bankstanding.state.PlayerStateManager;
 import javax.inject.Inject;
@@ -15,6 +16,7 @@ import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.ui.overlay.OverlayManager;
 
 @Slf4j
 @PluginDescriptor(
@@ -33,16 +35,28 @@ public class BankstandingPlugin extends Plugin
 	@Inject
 	private BankstandingExperienceManager experienceManager;
 
+	@Inject
+	BankstandingLevelProgressOverlay progressOverlay;
+
+	@Inject
+	OverlayManager overlayManager;
+
 	@Override
-	protected void startUp() throws Exception
+	protected void startUp()
 	{
+		overlayManager.add(progressOverlay);
+
 		experienceManager.init();
+		progressOverlay.init();
 	}
 
 	@Override
-	protected void shutDown() throws Exception
+	protected void shutDown()
 	{
+		progressOverlay.destroy();
 		experienceManager.destroy();
+
+		overlayManager.remove(progressOverlay);
 	}
 
 	@Subscribe
@@ -66,6 +80,7 @@ public class BankstandingPlugin extends Plugin
 		}
 
 		playerStateManager.checkForStateChanges();
+		experienceManager.onTick();
 	}
 
 	@Subscribe

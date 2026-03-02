@@ -29,7 +29,6 @@ public class BankstandingEventBus
 
 	public void publish(BankstandingEvent event)
 	{
-		log.debug("Publishing event: {}", event.getClass().getSimpleName());
 		for (Consumer<BankstandingEvent> listener : List.copyOf(listeners))
 		{
 			listener.accept(event);

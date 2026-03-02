@@ -9,13 +9,13 @@ import static dev.hollink.bankstanding.constant.TimeConstants.TIME_TILL_INITIAL_
 import dev.hollink.bankstanding.domain.BankstandingLevel;
 import dev.hollink.bankstanding.events.BankstandingEvent;
 import dev.hollink.bankstanding.events.BankstandingEventBus;
-import dev.hollink.bankstanding.events.BankstandingExperienceGainedEvent;
 import dev.hollink.bankstanding.events.BankstandingPlayerStateChangedEvent;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.client.config.ConfigManager;
@@ -28,12 +28,14 @@ public class BankstandingExperienceManager
 	private final ConfigManager configManager;
 	private final BankstandingEventBus events;
 
-	private Instant lastExpDrop;
-	private ActivityState lastState;
+	private Instant lastExpDrop = Instant.now();
+	private ActivityState lastState = ActivityState.GRINDING;
 
+	@Getter
 	private BankstandingLevel bankstanding = new BankstandingLevel(0);
 
-	public void init() {
+	public void init()
+	{
 		events.register(this::onEvent);
 	}
 
@@ -52,8 +54,10 @@ public class BankstandingExperienceManager
 		log.debug("BankstandingExperienceManager started with {} initial experience", bankstanding.getExperience());
 	}
 
-	private void onEvent(BankstandingEvent event) {
-		if (event instanceof BankstandingPlayerStateChangedEvent) {
+	private void onEvent(BankstandingEvent event)
+	{
+		if (event instanceof BankstandingPlayerStateChangedEvent)
+		{
 			onStateChange((BankstandingPlayerStateChangedEvent) event);
 		}
 	}
@@ -71,11 +75,12 @@ public class BankstandingExperienceManager
 			log.debug("Changing state from {} to {}", lastState, state);
 			lastState = state;
 			lastExpDrop = currentState.getNewState().getSince();
-			return;
 		}
+	}
 
+	public void onTick() {
 		Instant now = Instant.now();
-		Duration timeInState = Duration.between(currentState.getNewState().getSince(), now);
+		Duration timeInState = Duration.between(lastExpDrop, now);
 		if (timeInState.compareTo(TIME_TILL_INITIAL_EXP) < 0)
 		{
 			return;
@@ -83,7 +88,7 @@ public class BankstandingExperienceManager
 
 		if (Duration.between(lastExpDrop, now).compareTo(TIME_BETWEEN_DROPS) >= 0)
 		{
-			grantExperience(state);
+			grantExperience(lastState);
 			lastExpDrop = now;
 		}
 	}
@@ -94,6 +99,7 @@ public class BankstandingExperienceManager
 		double xpToGive = BASE_EXPERIENCE * stateMultiplier;
 
 		// TODO: apply AFK depth + bank stateMultiplier here
+
 		log.debug("Granting experience to {}", xpToGive);
 		boolean hasLeveledUp = bankstanding.gainExperience(xpToGive);
 		configManager.setRSProfileConfiguration(
@@ -102,6 +108,12 @@ public class BankstandingExperienceManager
 			String.valueOf(bankstanding.getExperience())
 		);
 
-		events.publish(new BankstandingExperienceGainedEvent(bankstanding.getExperience(), hasLeveledUp));
+		events.publish(
+			BankstandingEvent.experienceGained()
+				.skill(bankstanding)
+				.experienceGained(xpToGive)
+				.leveledUp(hasLeveledUp)
+				.build()
+		);
 	}
 }

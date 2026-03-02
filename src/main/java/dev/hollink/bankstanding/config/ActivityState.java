@@ -7,10 +7,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ActivityState
 {
-	AFK(1.20),
-	CHATTING(0.60),
-	LOAFING(0.30),
-	GRINDING(0.01);
+	AFK(1.2),
+	CHATTING(0.6),
+	LOAFING(0.3),
+	GRINDING(0);
 
 	final double expMultiplier;
 }
