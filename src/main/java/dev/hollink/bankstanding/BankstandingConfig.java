@@ -22,4 +22,15 @@ public interface BankstandingConfig extends Config
 	{
 		return false;
 	}
+
+
+	@ConfigItem(
+		keyName = "debugPanel",
+		name = "Display debug panel",
+		description = "Add a secondary panel which shows the active player state and distance towards the closest bank"
+	)
+	default boolean displayDebugPanel()
+	{
+		return false;
+	}
 }

@@ -9,7 +9,6 @@ import dev.hollink.bankstanding.state.BankstandingExperienceManager;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.Insets;
 import java.awt.Rectangle;
 import java.time.Duration;
 import java.time.Instant;

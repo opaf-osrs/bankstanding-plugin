@@ -3,6 +3,7 @@ package dev.hollink.bankstanding.state;
 import static dev.hollink.bankstanding.BankstandingConfig.CONFIG_GROUP;
 import static dev.hollink.bankstanding.BankstandingConfig.CURRENT_EXPERIENCE_CONFIG_KEY;
 import dev.hollink.bankstanding.config.ActivityState;
+import dev.hollink.bankstanding.config.BankDistance;
 import static dev.hollink.bankstanding.constant.ExperienceConstants.BASE_EXPERIENCE;
 import static dev.hollink.bankstanding.constant.TimeConstants.TIME_BETWEEN_DROPS;
 import static dev.hollink.bankstanding.constant.TimeConstants.TIME_TILL_INITIAL_EXP;
@@ -18,6 +19,8 @@ import javax.inject.Singleton;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.Client;
+import net.runelite.api.Player;
 import net.runelite.client.config.ConfigManager;
 
 @Slf4j
@@ -25,10 +28,12 @@ import net.runelite.client.config.ConfigManager;
 @RequiredArgsConstructor(onConstructor = @__(@Inject))
 public class BankstandingExperienceManager
 {
+	private final Client client;
 	private final ConfigManager configManager;
 	private final BankstandingEventBus events;
 
 	private Instant lastExpDrop = Instant.now();
+	private Instant lastStateChange = Instant.now();
 	private ActivityState lastState = ActivityState.GRINDING;
 
 	@Getter
@@ -74,13 +79,15 @@ public class BankstandingExperienceManager
 		{
 			log.debug("Changing state from {} to {}", lastState, state);
 			lastState = state;
+			lastStateChange = currentState.getNewState().getSince();
 			lastExpDrop = currentState.getNewState().getSince();
 		}
 	}
 
-	public void onTick() {
+	public void onTick()
+	{
 		Instant now = Instant.now();
-		Duration timeInState = Duration.between(lastExpDrop, now);
+		Duration timeInState = Duration.between(lastStateChange, now);
 		if (timeInState.compareTo(TIME_TILL_INITIAL_EXP) < 0)
 		{
 			return;
@@ -96,9 +103,8 @@ public class BankstandingExperienceManager
 	private void grantExperience(ActivityState state)
 	{
 		double stateMultiplier = state.getExpMultiplier();
-		double xpToGive = BASE_EXPERIENCE * stateMultiplier;
-
-		// TODO: apply AFK depth + bank stateMultiplier here
+		double bankMultiplier = getBankDistance().getExpMultiplier();
+		double xpToGive = BASE_EXPERIENCE * bankMultiplier * stateMultiplier;
 
 		log.debug("Granting experience to {}", xpToGive);
 		boolean hasLeveledUp = bankstanding.gainExperience(xpToGive);
@@ -115,5 +121,15 @@ public class BankstandingExperienceManager
 				.leveledUp(hasLeveledUp)
 				.build()
 		);
+	}
+
+	private BankDistance getBankDistance()
+	{
+		Player player = client.getLocalPlayer();
+		if (player == null)
+		{
+			return BankDistance.NOWHERE_NEAR;
+		}
+		return BankDistanceFinder.getDistanceFromClosestBank(player.getWorldLocation());
 	}
 }

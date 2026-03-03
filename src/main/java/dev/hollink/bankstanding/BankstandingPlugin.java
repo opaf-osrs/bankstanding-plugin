@@ -1,6 +1,7 @@
 package dev.hollink.bankstanding;
 
 import com.google.inject.Provides;
+import dev.hollink.bankstanding.overlay.BankstandingDebugOverlay;
 import dev.hollink.bankstanding.overlay.BankstandingLevelProgressOverlay;
 import dev.hollink.bankstanding.state.BankstandingExperienceManager;
 import dev.hollink.bankstanding.state.PlayerStateManager;
@@ -36,16 +37,21 @@ public class BankstandingPlugin extends Plugin
 	private BankstandingExperienceManager experienceManager;
 
 	@Inject
-	BankstandingLevelProgressOverlay progressOverlay;
+	private BankstandingLevelProgressOverlay progressOverlay;
 
 	@Inject
-	OverlayManager overlayManager;
+	private BankstandingDebugOverlay debugOverlay;
+
+	@Inject
+	private OverlayManager overlayManager;
 
 	@Override
 	protected void startUp()
 	{
 		overlayManager.add(progressOverlay);
+		overlayManager.add(debugOverlay);
 
+		debugOverlay.init();
 		experienceManager.init();
 		progressOverlay.init();
 	}
@@ -53,9 +59,11 @@ public class BankstandingPlugin extends Plugin
 	@Override
 	protected void shutDown()
 	{
+		debugOverlay.destroy();
 		progressOverlay.destroy();
 		experienceManager.destroy();
 
+		overlayManager.remove(debugOverlay);
 		overlayManager.remove(progressOverlay);
 	}
 
