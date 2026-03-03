@@ -63,7 +63,7 @@ public class BankLocationDebugOverlay extends Overlay
 			return;
 		}
 
-		WorldArea bankArea = fromCenter(bank.centerPoint, bank.size + 2);
+		WorldArea bankArea = fromCenter(bank.centerPoint, bank.size);
 		Color overlayColor = player.isInArea(bankArea) ? IN_BANK : NOT_IN_BANK;
 
 		renderWorldAreaOutline(graphics, bankArea, overlayColor);

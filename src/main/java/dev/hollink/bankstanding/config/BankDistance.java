@@ -7,12 +7,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum BankDistance
 {
-	INSIDE(2.0, Integer.MIN_VALUE, 1),
-	VERY_CLOSE(1.6, 2, 4),
-	CLOSE(1.2, 5, 7),
-	NEAR(0.6, 8, 12),
-	FAR(0.1, 13, 20),
-	NOWHERE_NEAR(0.05, 21, Integer.MAX_VALUE);
+	INSIDE(2.0, Integer.MIN_VALUE, 0),
+	VERY_CLOSE(1.6, 1, 2),
+	CLOSE(1.2, 3, 6),
+	NEAR(0.6, 7, 11),
+	FAR(0.1, 12, 15),
+	NOWHERE_NEAR(0, 16, Integer.MAX_VALUE);
 
 	final double expMultiplier;
 	final int minDistance;

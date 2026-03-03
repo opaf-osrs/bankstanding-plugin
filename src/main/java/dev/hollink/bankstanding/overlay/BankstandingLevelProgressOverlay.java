@@ -33,15 +33,18 @@ public class BankstandingLevelProgressOverlay extends OverlayPanel implements Ov
 
 	public void init()
 	{
-		BankstandingLevel bankstanding = experienceManager.getBankstanding();
-		updateInternalState(bankstanding.getCurrentLevel(), bankstanding.getExperience());
-
 		events.register(this::onEvent);
 	}
 
 	public void destroy()
 	{
 		events.unregister(this::onEvent);
+	}
+
+	public void startUp() {
+		BankstandingLevel bankstanding = experienceManager.getBankstanding();
+		updateInternalState(bankstanding.getCurrentLevel(), bankstanding.getExperience());
+		lastExpDrop = Instant.EPOCH;
 	}
 
 	private void onEvent(BankstandingEvent event)
@@ -55,7 +58,6 @@ public class BankstandingLevelProgressOverlay extends OverlayPanel implements Ov
 
 	private void updateInternalState(int currentLevel, double currentExperience)
 	{
-
 		int xpAtStartOfLevel = Experience.getXpForLevel(currentLevel);
 		int xpForNextLevel = Experience.getXpForLevel(currentLevel + 1);
 
