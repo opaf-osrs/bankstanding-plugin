@@ -21,7 +21,7 @@ public class ChatCommandHandler
 	private final Client client;
 	private final BankstandingExperienceManager xpManager;
 
-	private void sendLevelResponse(ChatMessage chatMessage, String label, int level, double experience)
+	private void sendLevelResponse(ChatMessage chatMessage, String label, int level, int experience)
 	{
 		String playerName = client.getLocalPlayer().getName();
 		if (playerName == null)
@@ -62,7 +62,11 @@ public class ChatCommandHandler
 		{
 			case "bs":
 			case "bankstanding":
-				sendLevelResponse(chatMessage, "Bankstanding", xpManager.getBankstanding().getCurrentLevel(), xpManager.getBankstanding().getExperience());
+				sendLevelResponse(
+					chatMessage,
+					"Bankstanding",
+					xpManager.getBankstanding().getCurrentLevel(),
+					(int) xpManager.getBankstanding().getExperience());
 				break;
 		}
 	}
