@@ -3,11 +3,11 @@ package dev.hollink.bankstanding.overlay;
 import dev.hollink.bankstanding.BankstandingConfig;
 import dev.hollink.bankstanding.config.ActivityState;
 import dev.hollink.bankstanding.constant.TimeConstants;
-import dev.hollink.bankstanding.domain.PlayerState;
 import dev.hollink.bankstanding.events.BankstandingEvent;
 import dev.hollink.bankstanding.events.BankstandingEventBus;
 import dev.hollink.bankstanding.events.BankstandingExperienceGainedEvent;
 import dev.hollink.bankstanding.events.BankstandingPlayerStateChangedEvent;
+import dev.hollink.bankstanding.state.BankDistanceFinder;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -18,6 +18,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.Client;
+import net.runelite.api.Player;
 import net.runelite.client.ui.overlay.OverlayPanel;
 import net.runelite.client.ui.overlay.components.LineComponent;
 import net.runelite.client.ui.overlay.components.TitleComponent;
@@ -27,8 +29,9 @@ import net.runelite.client.ui.overlay.components.TitleComponent;
 @RequiredArgsConstructor(onConstructor = @__(@Inject))
 public class BankstandingDebugOverlay extends OverlayPanel
 {
-	private final BankstandingEventBus events;
+	private final Client client;
 	private final BankstandingConfig config;
+	private final BankstandingEventBus events;
 
 	private Instant nextUpdate;
 	private ActivityState state;
@@ -79,14 +82,49 @@ public class BankstandingDebugOverlay extends OverlayPanel
 			LineComponent.builder()
 				.left("State:").leftColor(Color.WHITE)
 				.right(state.name())
-				.build());;
+				.build());
+		addClosestBankInfo();
 		panelComponent.getChildren().add(
 			LineComponent.builder()
 				.left("Xp in:").leftColor(Color.WHITE)
 				.right(String.format("%ds", getSecondsUntil(nextUpdate)))
 				.build());
 
+
 		return super.render(graphics);
+	}
+
+	private void addClosestBankInfo()
+	{
+		Player player = client.getLocalPlayer();
+		if (player == null)
+		{
+			return;
+		}
+		BankDistanceFinder.getCLosestBank(player.getWorldLocation())
+			.ifPresentOrElse(bank -> {
+				panelComponent.getChildren().add(
+					LineComponent.builder()
+						.left("Bank").leftColor(Color.WHITE)
+						.right(bank.name())
+						.build());
+				panelComponent.getChildren().add(
+					LineComponent.builder()
+						.left("Distance").leftColor(Color.WHITE)
+						.right(BankDistanceFinder.getDistanceToBank(bank, player.getWorldLocation()).name())
+						.build());
+			}, () -> {
+				panelComponent.getChildren().add(
+					LineComponent.builder()
+						.left("Bank").leftColor(Color.WHITE)
+						.right("NULL")
+						.build());
+				panelComponent.getChildren().add(
+					LineComponent.builder()
+						.left("Distance").leftColor(Color.WHITE)
+						.right("NULL")
+						.build());
+			});
 	}
 
 	private long getSecondsUntil(Instant target)

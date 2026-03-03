@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.Player;
+import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.config.ConfigManager;
 
 @Slf4j
@@ -130,6 +131,9 @@ public class BankstandingExperienceManager
 		{
 			return BankDistance.NOWHERE_NEAR;
 		}
-		return BankDistanceFinder.getDistanceFromClosestBank(player.getWorldLocation());
+		WorldPoint playerLocation = player.getWorldLocation();
+		return BankDistanceFinder.getCLosestBank(playerLocation)
+			.map(bank -> BankDistanceFinder.getDistanceToBank(bank, playerLocation))
+			.orElse(BankDistance.NOWHERE_NEAR);
 	}
 }

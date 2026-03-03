@@ -17,11 +17,11 @@ public class BankDistanceFinder
 			.min(Comparator.comparingInt(bank -> bank.centerPoint.distanceTo(from)));
 	}
 
-	public static BankDistance getDistanceFromClosestBank(WorldPoint from)
+	public static BankDistance getDistanceToBank(BankLocation bank, WorldPoint from)
 	{
-		return getCLosestBank(from)
-			.map(bank -> bank.centerPoint.distanceTo(from))
-			.map(BankDistance::fromDistance)
-			.orElse(BankDistance.NOWHERE_NEAR);
+		if (bank == null) {
+			return BankDistance.NOWHERE_NEAR;
+		}
+		return BankDistance.fromDistance(bank.centerPoint.distanceTo(from));
 	}
 }
