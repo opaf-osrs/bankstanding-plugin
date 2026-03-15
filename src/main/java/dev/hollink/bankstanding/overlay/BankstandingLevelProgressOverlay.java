@@ -1,6 +1,8 @@
 package dev.hollink.bankstanding.overlay;
 
 import static dev.hollink.bankstanding.constant.TimeConstants.PROGRESS_PANEL_FADE_DELAY;
+
+import dev.hollink.bankstanding.BankstandingConfig;
 import dev.hollink.bankstanding.domain.BankstandingLevel;
 import dev.hollink.bankstanding.events.BankstandingEvent;
 import dev.hollink.bankstanding.events.BankstandingEventBus;
@@ -24,6 +26,7 @@ public class BankstandingLevelProgressOverlay extends OverlayPanel implements Ov
 {
 	private final BankstandingEventBus events;
 	private final BankstandingExperienceManager experienceManager;
+	private final BankstandingConfig config;
 
 	private Instant lastExpDrop;
 	private int currentLvl;
@@ -80,11 +83,30 @@ public class BankstandingLevelProgressOverlay extends OverlayPanel implements Ov
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
-		if (Duration.between(lastExpDrop, Instant.now()).compareTo(PROGRESS_PANEL_FADE_DELAY) >= 0)
+		if (config.panelAlwaysOn()) {
+			addExperienceOverlay();
+			return super.render(graphics);
+		}
+
+		// Don't render if player is too far away from a bank region.
+		if (experienceManager.getBankDistance().ordinal() >= config.panelHideDistance().ordinal()) {
+			return super.render(graphics);
+		}
+
+		// Don't render if the player did not gain any experience since the configured time.
+		// Ignore this statement if player configured a negative number...
+		if (config.panelFadeTime() > 0 && Duration.between(lastExpDrop, Instant.now()).compareTo(Duration.ofSeconds(config.panelFadeTime())) >= 0)
 		{
 			return super.render(graphics);
 		}
 
+		addExperienceOverlay();
+
+		return super.render(graphics);
+	}
+
+	private void addExperienceOverlay()
+	{
 		setPanelWidth(160, panelComponent);
 		addPanelPadding(panelComponent);
 		addText("Bankstanding", String.valueOf(currentLvl), panelComponent);
@@ -92,8 +114,6 @@ public class BankstandingLevelProgressOverlay extends OverlayPanel implements Ov
 		addLabelledText("Xp to level:", String.valueOf(xpToLevel), panelComponent);
 		addLineBreak(panelComponent);
 		addProgressBar(progress, panelComponent);
-
-		return super.render(graphics);
 	}
 
 
