@@ -10,6 +10,4 @@ public interface TimeConstants
 
 	Duration TIME_TILL_INITIAL_EXP = Duration.ofMinutes(2);
 	Duration TIME_BETWEEN_DROPS = Duration.ofSeconds(30);
-
-	Duration PROGRESS_PANEL_FADE_DELAY = Duration.ofSeconds(90);
 }

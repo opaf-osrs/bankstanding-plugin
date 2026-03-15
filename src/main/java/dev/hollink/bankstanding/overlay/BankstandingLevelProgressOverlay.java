@@ -1,7 +1,5 @@
 package dev.hollink.bankstanding.overlay;
 
-import static dev.hollink.bankstanding.constant.TimeConstants.PROGRESS_PANEL_FADE_DELAY;
-
 import dev.hollink.bankstanding.BankstandingConfig;
 import dev.hollink.bankstanding.domain.BankstandingLevel;
 import dev.hollink.bankstanding.events.BankstandingEvent;
