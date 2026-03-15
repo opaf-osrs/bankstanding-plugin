@@ -130,7 +130,7 @@ public class BankstandingExperienceManager
 		);
 	}
 
-	private BankDistance getBankDistance()
+	public BankDistance getBankDistance()
 	{
 		Player player = client.getLocalPlayer();
 		if (player == null)
