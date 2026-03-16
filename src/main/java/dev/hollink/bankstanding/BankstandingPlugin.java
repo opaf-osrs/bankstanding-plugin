@@ -3,6 +3,7 @@ package dev.hollink.bankstanding;
 import com.google.inject.Provides;
 import dev.hollink.bankstanding.overlay.BankstandingLevelProgressOverlay;
 import dev.hollink.bankstanding.overlay.BankstandingOverlayManager;
+import dev.hollink.bankstanding.state.BankStatsManager;
 import dev.hollink.bankstanding.state.BankstandingExperienceManager;
 import dev.hollink.bankstanding.state.ChatCommandHandler;
 import dev.hollink.bankstanding.state.LevelUpHandler;
@@ -50,6 +51,9 @@ public class BankstandingPlugin extends Plugin
 	private ChatCommandHandler chatCommandHandler;
 
 	@Inject
+	private BankStatsManager bankStatsManager;
+
+	@Inject
 	private LevelUpHandler levelUpHandler;
 
 	@Override
@@ -81,6 +85,7 @@ public class BankstandingPlugin extends Plugin
 			playerStateManager.startUp();
 			experienceManager.startUp();
 			progressOverlay.startUp();
+			bankStatsManager.startUp();
 		}
 	}
 
@@ -94,6 +99,7 @@ public class BankstandingPlugin extends Plugin
 
 		playerStateManager.checkForStateChanges();
 		experienceManager.onTick();
+		bankStatsManager.onTick();
 	}
 
 	@Subscribe
