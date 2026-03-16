@@ -3,6 +3,7 @@ package dev.hollink.bankstanding.state;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dev.hollink.bankstanding.BankstandingConfig;
+import dev.hollink.bankstanding.BankstandingPlugin;
 import dev.hollink.bankstanding.config.BankDistance;
 import dev.hollink.bankstanding.config.BankLocation;
 import dev.hollink.bankstanding.domain.BankStats;
@@ -12,6 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.swing.SwingUtilities;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +29,7 @@ public class BankStatsManager
 	private static final int SAVE_INTERVAL_TICKS = 10;
 
 	private final Client client;
+	private final BankstandingPlugin plugin;
 	private final ConfigManager configManager;
 	private final Gson gson;
 
@@ -75,10 +78,9 @@ public class BankStatsManager
 
 		if (++ticksSinceLastPanelRefresh >= 2)
 		{
-//			SwingUtilities.invokeLater(panel::refresh);
+			SwingUtilities.invokeLater(plugin.getBankStatsPanel()::refresh);
 			ticksSinceLastPanelRefresh = 0;
 		}
-
 	}
 
 	private void restoreSavedData()

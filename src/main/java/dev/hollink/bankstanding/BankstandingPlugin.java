@@ -3,12 +3,19 @@ package dev.hollink.bankstanding;
 import com.google.inject.Provides;
 import dev.hollink.bankstanding.overlay.BankstandingLevelProgressOverlay;
 import dev.hollink.bankstanding.overlay.BankstandingOverlayManager;
+import dev.hollink.bankstanding.panel.BankstandingPanel;
 import dev.hollink.bankstanding.state.BankStatsManager;
 import dev.hollink.bankstanding.state.BankstandingExperienceManager;
 import dev.hollink.bankstanding.state.ChatCommandHandler;
 import dev.hollink.bankstanding.state.LevelUpHandler;
 import dev.hollink.bankstanding.state.PlayerStateManager;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import javax.inject.Inject;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
@@ -20,6 +27,8 @@ import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.ui.ClientToolbar;
+import net.runelite.client.ui.NavigationButton;
 
 @Slf4j
 @PluginDescriptor(
@@ -56,6 +65,14 @@ public class BankstandingPlugin extends Plugin
 	@Inject
 	private LevelUpHandler levelUpHandler;
 
+	@Getter
+	@Inject
+	private BankstandingPanel bankStatsPanel;
+
+	@Inject
+	private ClientToolbar clientToolbar;
+	private NavigationButton navButton;
+
 	@Override
 	protected void startUp()
 	{
@@ -64,6 +81,8 @@ public class BankstandingPlugin extends Plugin
 		levelUpHandler.init();
 
 		chatCommandManager.registerCommand("!lvl", chatCommandHandler::handleLevelCommand);
+		clientToolbar.addNavigation(navButton = buildNavButton());
+
 	}
 
 	@Override
@@ -74,6 +93,7 @@ public class BankstandingPlugin extends Plugin
 		levelUpHandler.destroy();
 
 		chatCommandManager.unregisterCommand("!lvl");
+		clientToolbar.removeNavigation(navButton);
 	}
 
 	@Subscribe
@@ -112,5 +132,30 @@ public class BankstandingPlugin extends Plugin
 	BankstandingConfig provideConfig(ConfigManager configManager)
 	{
 		return configManager.getConfig(BankstandingConfig.class);
+	}
+
+
+	private NavigationButton buildNavButton()
+	{
+		BufferedImage icon = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = icon.createGraphics();
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		// Gold coin-ish icon background
+		g.setColor(new Color(180, 150, 60));
+		g.fillOval(1, 1, 14, 14);
+		g.setColor(new Color(220, 190, 100));
+		g.fillOval(3, 3, 10, 10);
+		// "B" letter
+		g.setColor(new Color(80, 60, 20));
+		g.setFont(new Font("Dialog", Font.BOLD, 9));
+		g.drawString("B", 4, 12);
+		g.dispose();
+
+		return NavigationButton.builder()
+			.tooltip("Bankstanding Tracker")
+			.icon(icon)
+			.priority(6)
+			.panel(bankStatsPanel)
+			.build();
 	}
 }
