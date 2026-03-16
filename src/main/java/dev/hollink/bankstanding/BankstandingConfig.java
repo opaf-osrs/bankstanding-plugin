@@ -15,10 +15,19 @@ public interface BankstandingConfig extends Config
 	String CONFIG_GROUP = "Bankstanding";
 	String CURRENT_EXPERIENCE_CONFIG_KEY = "current_experience";
 
+	@ConfigSection(
+		name = "Bankstanding skill",
+		description = "Bankstanding experience overlay configuration",
+		position = 0,
+		closedByDefault = false
+	)
+	String skill = "skill";
+
 	@ConfigItem(
 		keyName = "overlayTimout",
 		name = "Overlay timeout",
-		description = "Show the experience panel for N seconds after the last exp drop."
+		description = "Show the experience panel for N seconds after the last exp drop.",
+		section = skill
 	)
 	@Units(Units.SECONDS)
 	default int panelFadeTime()
@@ -31,7 +40,8 @@ public interface BankstandingConfig extends Config
 		name = "Overlay max bank distance",
 		description = "Hide the overlay when moving outside a bank regardless of exp drops.<br/>" +
 			"Experience will still be earned within 25 tiles.<br/><br/>" +
-			"note: 0 disables this feature."
+			"note: 0 disables this feature.",
+		section = skill
 	)
 	default BankDistance panelHideDistance()
 	{
@@ -41,7 +51,8 @@ public interface BankstandingConfig extends Config
 	@ConfigItem(
 		keyName = "overlayAlwaysOn",
 		name = "Keep overlay always visible",
-		description = "Always show the bank standing experience panel, regardless of exp or distance."
+		description = "Always show the bank standing experience panel, regardless of exp or distance.",
+		section = skill
 	)
 	default boolean panelAlwaysOn()
 	{
@@ -49,9 +60,40 @@ public interface BankstandingConfig extends Config
 	}
 
 	@ConfigSection(
+		name = "Bank stats",
+		description = "Bank stats",
+		position = 1,
+		closedByDefault = false
+	)
+	String stats = "stats";
+
+	@ConfigItem(
+		keyName = "bankStatsOverlay",
+		name = "Show bank stats overlay",
+		description = "Display a small info overlay with your bank stats whenever you're standing at a bank",
+		section = stats,
+		position = 0
+	)
+	default boolean showBankStatsOverlay() {
+		return true;
+	};
+
+	@ConfigItem(
+		keyName = "countBankOpen",
+		name = "Only track when bank is closed",
+		description = "When enabled, time with the bank interface open is excluded (useful for separating actual bankstanding from banking)",
+		section = stats,
+		position = 1
+	)
+	default boolean excludeBankOpen()
+	{
+		return false;
+	}
+
+	@ConfigSection(
 		name = "Debug",
 		description = "Debugging panels and region highlights",
-		position = 2,
+		position = 99,
 		closedByDefault = true
 	)
 	String DEBUG_SECTION = "debug";
@@ -77,4 +119,6 @@ public interface BankstandingConfig extends Config
 	{
 		return false;
 	}
+
+
 }

@@ -120,7 +120,7 @@ public class BankStatsManager
 		configManager.setRSProfileConfiguration(BankstandingConfig.CONFIG_GROUP, "bankStats", data);
 	}
 
-	private Optional<BankLocation> getBankLocation()
+	public Optional<BankLocation> getBankLocation()
 	{
 		WorldPoint location = client.getLocalPlayer().getWorldLocation();
 		return BankDistanceFinder.getCLosestBank(location)
