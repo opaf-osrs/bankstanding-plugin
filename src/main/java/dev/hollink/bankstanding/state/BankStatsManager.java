@@ -19,6 +19,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.coords.WorldPoint;
+import net.runelite.api.gameval.InterfaceID;
+import net.runelite.api.widgets.Widget;
 import net.runelite.client.config.ConfigManager;
 
 @Slf4j
@@ -31,6 +33,7 @@ public class BankStatsManager
 	private final Client client;
 	private final BankstandingPlugin plugin;
 	private final ConfigManager configManager;
+	private final BankstandingConfig config;
 	private final Gson gson;
 
 	@Getter
@@ -49,7 +52,17 @@ public class BankStatsManager
 
 	public void onTick()
 	{
+		if (config.excludeBankOpen() && bankIsOpen()) {
+			return;
+		}
+
 		getBankLocation().ifPresentOrElse(this::extracted, () -> currentLocation = null);
+	}
+
+	private boolean bankIsOpen()
+	{
+		Widget bankWidget = client.getWidget(InterfaceID.BANKMAIN, 0);
+		return bankWidget != null && !bankWidget.isHidden();
 	}
 
 	private void extracted(BankLocation bankLocation)
