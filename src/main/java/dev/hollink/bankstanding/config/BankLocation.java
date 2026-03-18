@@ -1,5 +1,6 @@
 package dev.hollink.bankstanding.config;
 
+import dev.hollink.bankstanding.utils.BankDistanceFinder;
 import net.runelite.api.coords.WorldPoint;
 
 public enum BankLocation
@@ -95,6 +96,11 @@ public enum BankLocation
 
 	public final WorldPoint centerPoint;
 	public final int size;
+
+	public boolean contains(WorldPoint point)
+	{
+		return BankDistanceFinder.getDistanceToBank(this, point) == BankDistance.INSIDE;
+	}
 
 	BankLocation(int x, int y, int plane, int size)
 	{

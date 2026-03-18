@@ -24,4 +24,8 @@ public class BankDistanceFinder
 		}
 		return BankDistance.fromDistance(bank.centerPoint.distanceTo(from) - bank.size);
 	}
+
+	public static boolean isInsideBank(BankLocation bank, WorldPoint from) {
+		return getDistanceToBank(bank, from) == BankDistance.INSIDE;
+	}
 }

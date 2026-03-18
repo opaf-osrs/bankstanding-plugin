@@ -64,7 +64,7 @@ public class BankLocationDebugOverlay extends Overlay
 		}
 
 		WorldArea bankArea = fromCenter(bank.centerPoint, bank.size);
-		Color overlayColor = player.isInArea(bankArea) ? IN_BANK : NOT_IN_BANK;
+		Color overlayColor = bank.contains(player) ? IN_BANK : NOT_IN_BANK;
 
 		renderWorldAreaOutline(graphics, bankArea, overlayColor);
 		renderTile(graphics, bank.centerPoint, overlayColor);

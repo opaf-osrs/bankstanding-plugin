@@ -138,8 +138,8 @@ public class BankStatsManager
 
 	public Optional<BankLocation> getBankLocation()
 	{
-		WorldPoint location = client.getLocalPlayer().getWorldLocation();
-		return BankDistanceFinder.getCLosestBank(location)
-			.filter(bank -> BankDistanceFinder.getDistanceToBank(bank, location).equals(BankDistance.INSIDE));
+		WorldPoint player = client.getLocalPlayer().getWorldLocation();
+		return BankDistanceFinder.getCLosestBank(player)
+			.filter(bank -> bank.contains(player));
 	}
 }

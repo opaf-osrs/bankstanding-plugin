@@ -14,18 +14,24 @@ A Runelite plugin that awards you for doing nothing!
 
 ## Bank-bug bounty
 
-Bank areas are manually mapped and mostly taken from the Wiki. There *will* be missing or incorrectly placed bank's. 
-If you find a missing or incorrectly placed bank, please report these using the "Missing or incorrect bank" template 
-on GitHub. Reporters will receive a 100K bounty when the location is added.
+Bank areas are manually mapped and mostly taken from the Wiki. There *will* be missing or incorrectly placed bank's.
+If you find a missing or incorrectly placed bank, please report these using the "Missing or incorrect bank" template
+on GitHub. Reporters will receive a **100K bounty** for a missing bank or **50K*** for an incorrect bank as soon as the
+location is updated.
+
+<sup>* Nitpicky changes (such as a +1 size) will receive a smaller bounty.</sup>
 
 ## Examples
 
 **Bankstanding Level**
+
 ![](./screenshots/bankstanding-exp.png)
 
 **Banking session**
+
 ![](./screenshots/active-bank-stats.png)
 
 **Banking stat panel**
+
 ![](./screenshots/all-time-bank-stats.png)
 
