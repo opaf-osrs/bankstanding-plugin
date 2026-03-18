@@ -50,7 +50,7 @@ public class BankStatsManagerTest
 	public void onTick_shouldAddTickAndVisit_whenPlayerInsideBank()
 	{
 		BankLocation bankLocation = BankLocation.LUMBRIDGE;
-		WorldPoint playerLocation = BankLocation.LUMBRIDGE.centerPoint;
+		WorldPoint playerLocation = BankLocation.LUMBRIDGE.getCenterPoint();
 		when(mockPlayer.getWorldLocation()).thenReturn(playerLocation);
 
 		when(mockPlayer.getAnimation()).thenReturn(-1); // idle
@@ -73,7 +73,7 @@ public class BankStatsManagerTest
 	public void onTick_shouldCountActiveTick_whenAnimationIsNotIdle()
 	{
 		BankLocation bankLocation = BankLocation.LUMBRIDGE;
-		WorldPoint playerLocation = BankLocation.LUMBRIDGE.centerPoint;
+		WorldPoint playerLocation = BankLocation.LUMBRIDGE.getCenterPoint();
 		when(mockPlayer.getWorldLocation()).thenReturn(playerLocation);
 
 		when(mockPlayer.getAnimation()).thenReturn(1234); // active

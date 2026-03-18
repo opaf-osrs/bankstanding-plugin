@@ -16,6 +16,8 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.RequiredArgsConstructor;
@@ -45,8 +47,8 @@ public class PlayerStateDebugOverlay extends OverlayPanel implements OverlayHelp
 
 		setPanelWidth(160, panelComponent);
 		addPanelPadding(panelComponent);
-		addTitle("BS Debugger", panelComponent);
-		addText("State:", stateManager.getCurrentPlayerState().getActivity().name(), panelComponent);
+		addTitle("Bankstanding Debugger", panelComponent);
+		addText("State:", enumToString(stateManager.getCurrentPlayerState().getActivity().name()), panelComponent);
 		addText("Time left in state:", String.format("%ds", timeTillStateUpdates()), panelComponent);
 		addClosestBankInfo();
 		addText("Xp in:", String.format("%ds", timeTillExpDrop()), panelComponent);
@@ -63,11 +65,11 @@ public class PlayerStateDebugOverlay extends OverlayPanel implements OverlayHelp
 		}
 		BankDistanceFinder.getCLosestBank(player.getWorldLocation())
 			.ifPresentOrElse(bank -> {
-				addText("Bank:", bank.name(), panelComponent);
-				addText("Distance:", BankDistanceFinder.getDistanceToBank(bank, player.getWorldLocation()).name(), panelComponent);
+				addText("Bank:", bank.getDisplayName(), panelComponent);
+				addText("Distance:", enumToString(BankDistanceFinder.getDistanceToBank(bank, player.getWorldLocation()).name()), panelComponent);
 			}, () -> {
-				addText("Bank:", "NULL", panelComponent);
-				addText("Distance:", "NULL", panelComponent);
+				addText("Bank:", "-", panelComponent);
+				addText("Distance:", "-", panelComponent);
 			});
 	}
 
@@ -103,5 +105,11 @@ public class PlayerStateDebugOverlay extends OverlayPanel implements OverlayHelp
 	private long secondsSince(Activity<?> activity, Duration gracePeriod)
 	{
 		return Duration.between(Instant.now(), activity.getTime().plus(gracePeriod)).toSeconds();
+	}
+
+	private String enumToString(String name) {
+		return Arrays.stream(name.split("_"))
+			.map(word -> word.charAt(0) + word.substring(1).toLowerCase())
+			.collect(Collectors.joining(" "));
 	}
 }

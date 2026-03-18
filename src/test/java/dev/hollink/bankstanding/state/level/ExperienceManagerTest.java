@@ -47,7 +47,7 @@ public class ExperienceManagerTest
 
 		mockPlayer = mock(Player.class);
 		when(mockPlayer.getName()).thenReturn("TestPlayer");
-		when(mockPlayer.getWorldLocation()).thenReturn(GRAND_EXCHANGE.centerPoint);
+		when(mockPlayer.getWorldLocation()).thenReturn(GRAND_EXCHANGE.getCenterPoint());
 		when(mockClient.getLocalPlayer()).thenReturn(mockPlayer);
 
 		experienceManager = new ExperienceManager(mockClient, mockConfigManager, mockEventBus);
@@ -166,7 +166,7 @@ public class ExperienceManagerTest
 	{
 		var mockPlayer = mock(Player.class);
 		when(mockPlayer.getName()).thenReturn("TestPlayer");
-		when(mockPlayer.getWorldLocation()).thenReturn(GRAND_EXCHANGE.centerPoint);
+		when(mockPlayer.getWorldLocation()).thenReturn(GRAND_EXCHANGE.getCenterPoint());
 		when(mockClient.getLocalPlayer()).thenReturn(mockPlayer);
 
 		BankDistance bankDistance = experienceManager.getBankDistance();

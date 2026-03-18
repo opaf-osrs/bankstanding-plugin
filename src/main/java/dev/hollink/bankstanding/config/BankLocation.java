@@ -1,11 +1,14 @@
 package dev.hollink.bankstanding.config;
 
 import dev.hollink.bankstanding.utils.BankDistanceFinder;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+import lombok.Getter;
 import net.runelite.api.coords.WorldPoint;
 
+@Getter
 public enum BankLocation
 {
-
 	ALDARIN(1399, 2927, 3),
 	AL_KHARID(3269, 3167, 2),
 	ARCEUUS(1630, 3745, 1),
@@ -94,22 +97,44 @@ public enum BankLocation
 	YANILLE(2613, 3093, 4),
 	ZANARIS(2381, 4458, 2);
 
-	public final WorldPoint centerPoint;
-	public final int size;
+	private final String displayName;
+	private final WorldPoint centerPoint;
+	private final int size;
+
+	public String getDisplayName()
+	{
+		if (displayName != null)
+		{
+			return displayName;
+		}
+
+		return Arrays.stream(name().split("_")).map(word -> word.charAt(0) + word.substring(1).toLowerCase()).collect(Collectors.joining(" "));
+	}
 
 	public boolean contains(WorldPoint point)
 	{
 		return BankDistanceFinder.getDistanceToBank(this, point) == BankDistance.INSIDE;
 	}
 
-	BankLocation(int x, int y, int plane, int size)
+	BankLocation(String displayName, int x, int y, int plane, int size)
 	{
+		this.displayName = displayName;
 		this.centerPoint = new WorldPoint(x, y, plane);
 		this.size = size;
 	}
 
+	BankLocation(int x, int y, int plane, int size)
+	{
+		this(null, x, y, plane, size);
+	}
+
+	BankLocation(String displayName, int x, int y, int size)
+	{
+		this(displayName, x, y, 0, size);
+	}
+
 	BankLocation(int x, int y, int size)
 	{
-		this(x, y, 0, size);
+		this(null, x, y, 0, size);
 	}
 }

@@ -58,16 +58,16 @@ public class BankLocationDebugOverlay extends Overlay
 	private void renderBankArea(Graphics2D graphics, BankLocation bank)
 	{
 		WorldPoint player = client.getLocalPlayer().getWorldLocation();
-		if (bank.centerPoint.getPlane() != player.getPlane())
+		if (bank.getCenterPoint().getPlane() != player.getPlane())
 		{
 			return;
 		}
 
-		WorldArea bankArea = fromCenter(bank.centerPoint, bank.size);
+		WorldArea bankArea = fromCenter(bank.getCenterPoint(), bank.getSize());
 		Color overlayColor = bank.contains(player) ? IN_BANK : NOT_IN_BANK;
 
 		renderWorldAreaOutline(graphics, bankArea, overlayColor);
-		renderTile(graphics, bank.centerPoint, overlayColor);
+		renderTile(graphics, bank.getCenterPoint(), overlayColor);
 	}
 
 	public static WorldArea fromCenter(WorldPoint center, int size)

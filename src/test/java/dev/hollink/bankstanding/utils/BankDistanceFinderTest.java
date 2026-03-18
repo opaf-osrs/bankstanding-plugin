@@ -46,7 +46,7 @@ public class BankDistanceFinderTest
 	public void getDistanceToBank_shouldReturnCorrectDistance()
 	{
 		BankLocation bank = BankLocation.VARROCK_WEST;
-		WorldPoint point = bank.centerPoint;
+		WorldPoint point = bank.getCenterPoint();
 
 		BankDistance result = BankDistanceFinder.getDistanceToBank(bank, point);
 
@@ -59,9 +59,9 @@ public class BankDistanceFinderTest
 		BankLocation bank = BankLocation.VARROCK_WEST;
 
 		WorldPoint point = new WorldPoint(
-			bank.centerPoint.getX() + 100,
-			bank.centerPoint.getY() + 100,
-			bank.centerPoint.getPlane()
+			bank.getCenterPoint().getX() + 100,
+			bank.getCenterPoint().getY() + 100,
+			bank.getCenterPoint().getPlane()
 		);
 
 		BankDistance result = BankDistanceFinder.getDistanceToBank(bank, point);

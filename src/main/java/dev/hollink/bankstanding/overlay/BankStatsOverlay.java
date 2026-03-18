@@ -46,7 +46,7 @@ public class BankStatsOverlay extends OverlayPanel implements OverlayHelper
 	private void addBankingData(BankLocation bankLocation, BankStats session)
 	{
 		setPanelWidth(160, panelComponent);
-		addTitle(bankLocation.name(), panelComponent);
+		addTitle(bankLocation.getDisplayName(), panelComponent);
 		addLineBreak(panelComponent);
 		addLabelledText("Session", formatTicksToTime(session.getTotalTicks()), panelComponent);
 		addLabelledText("Idle", formatTicksToTime(session.getIdleTicks()) + "  (" + session.idlePercent() + "%)", panelComponent);

@@ -14,7 +14,7 @@ public class BankDistanceFinder
 	public static Optional<BankLocation> getCLosestBank(WorldPoint from)
 	{
 		return Arrays.stream(BankLocation.values())
-			.min(Comparator.comparingInt(bank -> bank.centerPoint.distanceTo(from)));
+			.min(Comparator.comparingInt(bank -> bank.getCenterPoint().distanceTo(from)));
 	}
 
 	public static BankDistance getDistanceToBank(BankLocation bank, WorldPoint from)
@@ -22,6 +22,6 @@ public class BankDistanceFinder
 		if (bank == null) {
 			return BankDistance.NOWHERE_NEAR;
 		}
-		return BankDistance.fromDistance(bank.centerPoint.distanceTo(from) - bank.size);
+		return BankDistance.fromDistance(bank.getCenterPoint().distanceTo(from) - bank.getSize());
 	}
 }

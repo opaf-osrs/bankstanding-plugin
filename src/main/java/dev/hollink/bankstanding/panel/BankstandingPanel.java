@@ -227,7 +227,7 @@ public class BankstandingPanel extends PluginPanel
 		left.setLayout(new BoxLayout(left, BoxLayout.Y_AXIS));
 		left.setOpaque(false);
 
-		JLabel nameLabel = new JLabel(bank.name());
+		JLabel nameLabel = new JLabel(bank.getDisplayName());
 		nameLabel.setForeground(Color.WHITE);
 		nameLabel.setFont(FontManager.getRunescapeSmallFont());
 		left.add(nameLabel);

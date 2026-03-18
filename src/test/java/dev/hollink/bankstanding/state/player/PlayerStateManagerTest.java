@@ -39,7 +39,7 @@ public class PlayerStateManagerTest
 		mockPlayer = mock(Player.class);
 		when(mockClient.getLocalPlayer()).thenReturn(mockPlayer);
 		when(mockPlayer.getName()).thenReturn("TestPlayer");
-		when(mockPlayer.getWorldLocation()).thenReturn(GRAND_EXCHANGE.centerPoint);
+		when(mockPlayer.getWorldLocation()).thenReturn(GRAND_EXCHANGE.getCenterPoint());
 
 		playerStateManager = new PlayerStateManager(mockClient, mockEventBus);
 		playerStateManager.startUp();
