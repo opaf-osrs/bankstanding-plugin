@@ -7,9 +7,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ActivityState
 {
-	AFK(1.2),
-	CHATTING(1.1),
-	LOAFING(0.3),
+	AFK(1),
+	CHATTING(0.90),
+	LOAFING(0.25),
 	GRINDING(0),
 	NULL(0);
 

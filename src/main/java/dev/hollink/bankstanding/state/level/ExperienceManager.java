@@ -2,6 +2,7 @@ package dev.hollink.bankstanding.state.level;
 
 import dev.hollink.bankstanding.config.ActivityState;
 import dev.hollink.bankstanding.config.BankDistance;
+import dev.hollink.bankstanding.config.ExpRateConstants;
 import dev.hollink.bankstanding.domain.BankstandingLevel;
 import dev.hollink.bankstanding.events.BankstandingEvent;
 import dev.hollink.bankstanding.events.BankstandingEventBus;
@@ -22,8 +23,7 @@ import net.runelite.client.config.ConfigManager;
 
 import static dev.hollink.bankstanding.BankstandingConfig.CONFIG_GROUP;
 import static dev.hollink.bankstanding.BankstandingConfig.CURRENT_EXPERIENCE_CONFIG_KEY;
-import static dev.hollink.bankstanding.config.ExperienceConstants.BASE_EXPERIENCE;
-import static dev.hollink.bankstanding.config.TimeConstants.TIME_BETWEEN_DROPS;
+import static dev.hollink.bankstanding.config.ExpRateConstants.TIME_BETWEEN_DROPS;
 import static dev.hollink.bankstanding.config.TimeConstants.TIME_TILL_INITIAL_EXP;
 
 @Slf4j
@@ -110,12 +110,9 @@ public class ExperienceManager
 
 	public void grantExperience(ActivityState state)
 	{
-		double stateMultiplier = state.expMultiplier;
-		double bankMultiplier = getBankDistance().expMultiplier;
-		double xpToGive = BASE_EXPERIENCE * bankMultiplier * stateMultiplier;
+		double xpToGive = ExpRateConstants.calculateExpGain(state, getBankDistance());
 
-		log.debug("Granting {} Bankstanding experience to player ({}x{}x{})",
-			xpToGive, BASE_EXPERIENCE, bankMultiplier, stateMultiplier);
+		log.debug("Granting {} Bankstanding experience to player", xpToGive);
 		boolean hasLeveledUp = bankstanding.gainExperience(xpToGive);
 
 		configManager.setRSProfileConfiguration(

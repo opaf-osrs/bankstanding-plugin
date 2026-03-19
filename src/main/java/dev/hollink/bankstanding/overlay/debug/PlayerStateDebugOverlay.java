@@ -1,17 +1,12 @@
 package dev.hollink.bankstanding.overlay.debug;
 
 import dev.hollink.bankstanding.BankstandingConfig;
-import static dev.hollink.bankstanding.config.TimeConstants.GRACE_PERIOD_CHATTING;
-import static dev.hollink.bankstanding.config.TimeConstants.GRACE_PERIOD_GRINDING;
-import static dev.hollink.bankstanding.config.TimeConstants.GRACE_PERIOD_MOVEMENT;
-import static dev.hollink.bankstanding.config.TimeConstants.TIME_BETWEEN_DROPS;
-import static dev.hollink.bankstanding.config.TimeConstants.TIME_TILL_INITIAL_EXP;
 import dev.hollink.bankstanding.domain.Activity;
 import dev.hollink.bankstanding.domain.PlayerState;
 import dev.hollink.bankstanding.overlay.OverlayHelper;
-import dev.hollink.bankstanding.utils.BankDistanceFinder;
 import dev.hollink.bankstanding.state.level.ExperienceManager;
 import dev.hollink.bankstanding.state.player.PlayerStateManager;
+import dev.hollink.bankstanding.utils.BankDistanceFinder;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.time.Duration;
@@ -25,6 +20,12 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.Player;
 import net.runelite.client.ui.overlay.OverlayPanel;
+
+import static dev.hollink.bankstanding.config.ExpRateConstants.TIME_BETWEEN_DROPS;
+import static dev.hollink.bankstanding.config.TimeConstants.GRACE_PERIOD_CHATTING;
+import static dev.hollink.bankstanding.config.TimeConstants.GRACE_PERIOD_GRINDING;
+import static dev.hollink.bankstanding.config.TimeConstants.GRACE_PERIOD_MOVEMENT;
+import static dev.hollink.bankstanding.config.TimeConstants.TIME_TILL_INITIAL_EXP;
 
 @Slf4j
 @Singleton
@@ -107,7 +108,8 @@ public class PlayerStateDebugOverlay extends OverlayPanel implements OverlayHelp
 		return Duration.between(Instant.now(), activity.getTime().plus(gracePeriod)).toSeconds();
 	}
 
-	private String enumToString(String name) {
+	private String enumToString(String name)
+	{
 		return Arrays.stream(name.split("_"))
 			.map(word -> word.charAt(0) + word.substring(1).toLowerCase())
 			.collect(Collectors.joining(" "));

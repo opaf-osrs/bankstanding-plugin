@@ -9,5 +9,4 @@ public interface TimeConstants
 	Duration GRACE_PERIOD_CHATTING = Duration.ofMinutes(2);
 
 	Duration TIME_TILL_INITIAL_EXP = Duration.ofMinutes(5);
-	Duration TIME_BETWEEN_DROPS = Duration.ofSeconds(30);
 }
