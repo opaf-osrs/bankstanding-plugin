@@ -1,13 +1,12 @@
 package dev.hollink.bankstanding;
 
 import com.google.inject.Provides;
-import dev.hollink.bankstanding.overlay.ExperienceOverlay;
 import dev.hollink.bankstanding.overlay.BankstandingOverlayManager;
 import dev.hollink.bankstanding.overlay.ExperienceOverlayStateManager;
 import dev.hollink.bankstanding.panel.BankstandingPanel;
+import dev.hollink.bankstanding.state.ChatCommandHandler;
 import dev.hollink.bankstanding.state.bankstats.BankStatsManager;
 import dev.hollink.bankstanding.state.level.ExperienceManager;
-import dev.hollink.bankstanding.state.ChatCommandHandler;
 import dev.hollink.bankstanding.state.level.LevelUpHandler;
 import dev.hollink.bankstanding.state.player.PlayerStateManager;
 import java.awt.Color;

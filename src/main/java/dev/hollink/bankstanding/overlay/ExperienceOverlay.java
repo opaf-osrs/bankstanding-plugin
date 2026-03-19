@@ -2,7 +2,6 @@ package dev.hollink.bankstanding.overlay;
 
 import dev.hollink.bankstanding.BankstandingConfig;
 import dev.hollink.bankstanding.state.level.ExperienceManager;
-import dev.hollink.bankstanding.utils.ExperienceFormatter;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import javax.inject.Inject;

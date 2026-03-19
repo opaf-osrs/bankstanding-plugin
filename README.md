@@ -1,3 +1,6 @@
+![image](https://img.shields.io/endpoint?url=https://api.runelite.net/pluginhub/shields/rank/plugin/bankstanding)
+![image](https://img.shields.io/endpoint?url=https://api.runelite.net/pluginhub/shields/installs/plugin/bankstanding)
+
 # Bankstanding
 
 A Runelite plugin that awards you for doing nothing!
