@@ -12,6 +12,7 @@ public enum BankLocation
 {
 	ALDARIN(1399, 2927, 3),
 	AL_KHARID(3269, 3167, 2),
+	APE_ATOL(2781, 2782, 1),
 	ARCEUUS(1630, 3745, 1),
 	ARDOUGNE_NORTH("Ardougne (North)", 2617, 3332, 3),
 	ARDOUGNE_SOUTH("Ardougne (South)", 2653, 3284, 3),
@@ -21,8 +22,8 @@ public enum BankLocation
 	CANIFIS(3512, 3478, 3),
 	CASTLE_WARS(2443, 3083, 1),
 	CATHERBY(2809, 3441, 2),
-	CIVITAS_WEST(1648, 3117, 4),
 	CIVITAS_EAST(1780, 3096, 3),
+	CIVITAS_WEST(1648, 3117, 4),
 	COOKING_GUILD(3148, 3448, 0),
 	CRAFTING_GUILD(2936, 3280, 0),
 	DARKMEYER(3602, 3366, 3),
@@ -57,6 +58,7 @@ public enum BankLocation
 	LUMBRIDGE_BASEMENT(3218, 9623, 2),
 	LUNAR_ISLE(2101, 3919, 2),
 	MINING_GUILD(3014, 9718, 2),
+	MOR_UL_REK(2542, 5141, 2),
 	MOS_LE_HARMLESS("Mos Le'Harmless", 3681, 2982, 3),
 	MOTHERLOAD_MINE(3760, 5666, 2),
 	MOUNT_KARUULM(1321, 3822, 2),
@@ -87,6 +89,7 @@ public enum BankLocation
 	THE_KITCHEN("Hosidius Kitchen", 1676, 3616, 1),
 	TROUBLE_BREWING(3810, 3020, 3),
 	TUTORIAL("Tutorial Island", 3122, 3124, 2),
+	TZAAR(2445, 5179, 2),
 	VARROCK_EAST("Varrock East Bank", 3254, 3421, 3),
 	VARROCK_WEST("Varrock West Bank", 3185, 3440, 6),
 	VER_SINHAZA(3650, 3208, 3),
@@ -96,7 +99,7 @@ public enum BankLocation
 	WINTERTODT(1638, 3942, 1),
 	WOODCUTTING_GUILD(1589, 3475, 1),
 	YANILLE(2613, 3093, 4),
-	ZANARIS(2381, 4458, 2);
+	ZANARIS(2383, 4458, 4);
 
 	@Getter(AccessLevel.NONE)
 	private final String displayName;
