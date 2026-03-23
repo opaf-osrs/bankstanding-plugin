@@ -19,6 +19,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
@@ -111,7 +112,7 @@ public class BankstandingPanel extends PluginPanel
 
 		JButton resetBtn = new JButton("Reset");
 		styleResetButton(resetBtn);
-//		resetBtn.addActionListener(e -> confirmReset());
+		resetBtn.addActionListener(e -> confirmReset());
 		controlRow.add(resetBtn, BorderLayout.EAST);
 
 		header.add(controlRow);
@@ -145,6 +146,23 @@ public class BankstandingPanel extends PluginPanel
 		header.add(sep);
 
 		return header;
+	}
+
+	private void confirmReset()
+	{
+		String label   = showSession ? "Reset Session" : "Reset All Time";
+		String message = showSession ? "Clear session stats?" : "Clear all-time stats? This cannot be undone.";
+
+		int choice = JOptionPane.showOptionDialog(
+			this, message, "Confirm Reset",
+			JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE,
+			null, new String[]{label, "Cancel"}, "Cancel");
+
+		if (choice == 0)
+		{
+			if (showSession) bankStatsManager.resetSession();
+			else             bankStatsManager.resetAllTime();
+		}
 	}
 
 	private void styleToggle(JButton btn, boolean active)

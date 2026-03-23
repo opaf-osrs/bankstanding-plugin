@@ -143,6 +143,20 @@ public class BankStatsManager
 		configManager.setRSProfileConfiguration(BankstandingConfig.CONFIG_GROUP, "bankStats", data);
 	}
 
+	public void resetSession()
+	{
+		sessionStats.clear();
+		SwingUtilities.invokeLater(plugin.getBankStatsPanel()::refresh);
+	}
+
+	public void resetAllTime()
+	{
+		allTimeStats.clear();
+		sessionStats.clear();
+		saveData();
+		SwingUtilities.invokeLater(plugin.getBankStatsPanel()::refresh);
+	}
+
 	public Optional<BankLocation> getBankLocation()
 	{
 		WorldPoint player = client.getLocalPlayer().getWorldLocation();
