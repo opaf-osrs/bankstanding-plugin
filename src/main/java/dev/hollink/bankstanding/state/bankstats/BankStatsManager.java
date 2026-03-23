@@ -11,7 +11,9 @@ import dev.hollink.bankstanding.utils.BankDistanceFinder;
 import java.lang.reflect.Type;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.swing.SwingUtilities;
@@ -23,6 +25,9 @@ import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.widgets.Widget;
 import net.runelite.client.config.ConfigManager;
+
+import static net.runelite.api.gameval.InterfaceID.BANKMAIN;
+import static net.runelite.api.gameval.InterfaceID.BANKPIN_KEYPAD;
 
 @Slf4j
 @Singleton
@@ -62,8 +67,10 @@ public class BankStatsManager
 
 	private boolean bankIsOpen()
 	{
-		Widget bankWidget = client.getWidget(InterfaceID.BANKMAIN, 0);
-		return bankWidget != null && !bankWidget.isHidden();
+		return Stream.of(BANKPIN_KEYPAD, BANKMAIN)
+			.map(widget -> client.getWidget(widget, 0))
+			.filter(Objects::nonNull)
+			.anyMatch(widget -> !widget.isHidden());
 	}
 
 	private void addTickToBankLocation(BankLocation bankLocation)
